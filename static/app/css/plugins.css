@@ -19503,6 +19503,7 @@ au {
     -ms-transform: translate(100%, 0);
     -o-transform: translate(100%, 0);
     transform: translate(100%, 0);
+    border-radius: 10px;
 }
 
 .sidebar.sidebar-right.sidebar-open {
@@ -19512,6 +19513,7 @@ au {
     -o-transform: translate(0, 0);
     transform: translate(0, 0);
     box-shadow: 5px 7px 26px -5px #d5d4e0;
+    margin: 10px 10px 10px 0;
 }
 
 @media (max-width: 320px) {

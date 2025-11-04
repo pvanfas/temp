@@ -99,6 +99,7 @@ class HybridDeleteView(LoginRequiredMixin, DeleteView):
 class HybridListView(LoginRequiredMixin, ExportMixin, SingleTableMixin, FilterView, ListView):
     table_pagination = {"per_page": 100}
     template_name = "app/common/object_list.html"
+    exclude_columns = ("pk", "action")
 
     def get_queryset(self):
         search_fields = getattr(self, "search_fields", None)

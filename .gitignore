@@ -130,3 +130,4 @@ venv.bak/
 .vscode
 *.code-workspace
 .history
+*.DS_Store

@@ -8,10 +8,6 @@
         {% if table.show_header %}
         <thead {{ table.attrs.thead.as_html }}>
             <tr>
-                {% block table.serial.head %}
-                <th>Sl No</th>
-                {% endblock %}
-
                 {% for column in table.columns %}
                 <th {{ column.attrs.th.as_html }}>
                     {% if column.orderable %}
@@ -31,11 +27,6 @@
             {% for row in table.paginated_rows %}
             {% block table.tbody.row %}
             <tr {{ row.attrs.as_html }}>
-
-                {% block table.serial.data %}
-                <td>{{forloop.counter0|add:table.page.start_index}}</td>
-                {% endblock %}
-
                 {% for column, cell in row.items %}
                 <td {{ column.attrs.td.as_html }}>
                     {% if column.localize == None %}

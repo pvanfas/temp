@@ -22,13 +22,7 @@ class BatchTable(BaseTable):
             "code",
             "bulk_id_card",
             "bulk_reciepts",
-            "bulk_tags",
-            # "amount",
-            # "subtotal",
-            # "payment_bank_total",
-            # "payment_cash_total",
-            # "voucher_total",
-            # "cash_balance",
+            "bulk_tags"
         )
         attrs = {"class": "table key-buttons border-bottom table-hover nowrap"}  # noqa: RUF012
 
@@ -58,10 +52,14 @@ class ApplicantTable(BaseTable):
 
 
 class UmrahPaymentTable(BaseTable):
+    checkbox = columns.CheckBoxColumn(accessor="pk", orderable=False)
+    applicant = columns.Column(accessor="applicant.fullname", orderable=False, linkify=True)
+
     class Meta:
         model = UmrahPayment
-        fields = ("reciept_number", "applicant", "amount", "date", "mode", "reciept")
+        fields = ("checkbox", "reciept_number", "applicant", "amount", "date", "mode", "reciept")
         attrs = {"class": "table key-buttons border-bottom table-hover"}  # noqa: RUF012
+        sequence = ("checkbox", "...", "action")
 
 
 class PaymentPurposeTable(BaseTable):
@@ -72,7 +70,11 @@ class PaymentPurposeTable(BaseTable):
 
 
 class VoucherTable(BaseTable):
+    checkbox = columns.CheckBoxColumn(accessor="pk", orderable=False)
+    batch = columns.Column(verbose_name="Batch", orderable=True, linkify=True)
+
     class Meta:
         model = Voucher
-        fields = ("voucher_number", "batch", "amount", "date", "purpose", "voucher")
+        fields = ("checkbox", "voucher_number", "batch", "amount", "date", "purpose")
         attrs = {"class": "table key-buttons border-bottom table-hover"}  # noqa: RUF012
+        sequence = ("checkbox", "...", "action")

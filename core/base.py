@@ -1,7 +1,6 @@
 from uuid import uuid4
 
 from django.db import models
-from django.http import HttpResponseRedirect
 from django_tables2 import Table, columns
 from import_export.admin import ImportExportActionModelAdmin
 
@@ -26,13 +25,6 @@ class BaseModel(models.Model):
     def get_fields(self):
         return generate_fields(self)
 
-    def delete(self, *args, **kwargs):
-        self.is_active = False
-        self.save()
-        if hasattr(self, "get_list_url"):
-            return HttpResponseRedirect(self.get_list_url())
-        return super().delete(*args, **kwargs)
-
 
 class BaseAdmin(ImportExportActionModelAdmin):
     exclude = ("creator", "is_active")
@@ -41,10 +33,6 @@ class BaseAdmin(ImportExportActionModelAdmin):
     actions = (mark_active, mark_inactive)
     readonly_fields = ("is_active", "creator", "pk")
     search_fields = ("pk",)
-
-    # def render_change_form(self, request, context, add=False, change=False, form_url="", obj=None):
-    #     context.update({"show_save_and_continue": False, "show_save_and_add_another": False})
-    #     return super().render_change_form(request, context, add, change, form_url, obj)
 
     def save_model(self, request, obj, form, change):
         if not obj.pk:
@@ -56,9 +44,16 @@ class BaseAdmin(ImportExportActionModelAdmin):
 
 
 class BaseTable(Table):
+    serial = columns.Column(empty_values=(), verbose_name="S.No")
     pk = columns.Column(visible=False)
     action = columns.TemplateColumn(template_name="app/partials/table_actions.html", orderable=False)
 
+    def render_serial(self, record):
+        self._row_counter = getattr(self, '_row_counter', 0) + 1
+        return self._row_counter
+        
     def before_render(self, request):
-        if request.GET.get("_export"):
-            self.columns.hide("action")
+        if hasattr(self, 'page') and self.page is not None:
+            self._row_counter = (self.page.number - 1) * self.page.paginator.per_page
+        else:
+            self._row_counter = 0

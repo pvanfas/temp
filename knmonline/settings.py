@@ -144,6 +144,8 @@ VERSATILEIMAGEFIELD_SETTINGS = {
 }
 
 AUTH_USER_MODEL = "accounts.User"
+FORM_RENDERER = "core.renderers.CleanFormRenderer"
+
 
 X_FRAME_OPTIONS = "SAMEORIGIN"
 SILENCED_SYSTEM_CHECKS = ["security.W019"]

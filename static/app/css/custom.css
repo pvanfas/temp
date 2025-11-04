@@ -928,7 +928,7 @@ body:not(.dark-mode) .transparent-container .list-group-item:last-child {
 
 .light-mode .btn-outline-info:hover {
     background-color: #cdf4fe;
-    color: #128af9 !important;
+    color: #7512e9 !important;
 }
 
 .light-mode .btn-outline-info {
@@ -1931,10 +1931,10 @@ a.point_btn:hover {
 
 .btn-outline-info:focus {
     box-shadow: none;
-    color: #128af9 !important;
+    color: #7512e9 !important;
     background-color: transparent;
     background-image: none;
-    border-color: #128af9;
+    border-color: #7512e9;
     box-shadow: 0 0px 10px -5px rgba(69, 170, 242, 0.5);
 
 }

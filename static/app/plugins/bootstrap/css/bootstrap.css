@@ -6255,6 +6255,8 @@ textarea.form-control-lg {
   background-clip: padding-box;
   outline: 0;
   transition: transform 0.3s ease-in-out;
+  border-radius: 10px;
+  margin: 10px;
 }
 @media (prefers-reduced-motion: reduce) {
   .offcanvas {
@@ -6283,12 +6285,21 @@ textarea.form-control-lg {
   align-items: center;
   justify-content: space-between;
   padding: 1rem 1rem;
+  border-radius: 10px 10px 0 0;
 }
 .offcanvas-header .btn-close {
-  padding: 0.5rem 0.5rem;
   margin-top: -0.5rem;
   margin-right: -0.5rem;
   margin-bottom: -0.5rem;
+  background: #fff;
+  border-radius: 50%;
+  padding: 0;
+  width: 30px;
+  height: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 1;
 }
 
 .offcanvas-title {
