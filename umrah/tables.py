@@ -15,15 +15,7 @@ class AgencyTable(BaseTable):
 class BatchTable(BaseTable):
     class Meta:
         model = Batch
-        fields = (
-            "name",
-            "year",
-            "applicants_count",
-            "code",
-            "bulk_id_card",
-            "bulk_reciepts",
-            "bulk_tags"
-        )
+        fields = ("name", "year", "applicants_count", "code", "bulk_id_card", "bulk_reciepts", "bulk_tags")
         attrs = {"class": "table key-buttons border-bottom table-hover nowrap"}  # noqa: RUF012
 
 
@@ -33,6 +25,7 @@ class ApplicantTable(BaseTable):
     class Meta:
         model = Applicant
         fields = (
+            "serial",
             "image_tag",
             "fullname",
             "whatsapp_link",
@@ -65,7 +58,10 @@ class UmrahPaymentTable(BaseTable):
 class PaymentPurposeTable(BaseTable):
     class Meta:
         model = PaymentPurpose
-        fields = ("name",)
+        fields = (
+            "serial",
+            "name",
+        )
         attrs = {"class": "table key-buttons border-bottom table-hover"}  # noqa: RUF012
 
 

@@ -49,11 +49,27 @@ class BaseTable(Table):
     action = columns.TemplateColumn(template_name="app/partials/table_actions.html", orderable=False)
 
     def render_serial(self, record):
-        self._row_counter = getattr(self, '_row_counter', 0) + 1
+        self._row_counter = getattr(self, "_row_counter", 0) + 1
         return self._row_counter
-        
+
     def before_render(self, request):
-        if hasattr(self, 'page') and self.page is not None:
+        if hasattr(self, "page") and self.page is not None:
             self._row_counter = (self.page.number - 1) * self.page.paginator.per_page
         else:
             self._row_counter = 0
+
+    class Meta:
+        attrs = {"class": "table key-buttons border-bottom table-hover"}  # noqa: RUF012
+        sequence = ("serial", "...", "action")
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        # Ensure serial column is always first, regardless of subclass definition
+        cols = list(self.base_columns.keys())
+        if "serial" in cols:
+            cols.remove("serial")
+            cols.insert(0, "serial")
+        if "action" in cols:
+            cols.remove("action")
+            cols.append("action")
+        self.sequence = cols

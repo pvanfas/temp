@@ -1,5 +1,6 @@
 from umrah.models import Applicant
 
+
 def run():
     # change applicant photo file name (both media and db) to applicant.id.extension
     for applicant in Applicant.objects.all():
