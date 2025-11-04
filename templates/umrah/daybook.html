@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    {% load humanize %}
+    <meta charset="UTF-8">
+    <title>Daybook for {{ month }}</title>
+    <!-- Include Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        * {
+            box-sizing: border-box;
+            font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+            font-size: 12px;
+        }
+
+
+        h1,
+        h2,
+        h3 {
+            font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+            font-weight: bold;
+        }
+
+        h1 {
+            font-size: 22px;
+        }
+
+        h2 {
+            font-size: 16px;
+        }
+
+        .box {
+            border: 1px solid #ccc;
+            padding: 12px;
+            background: #f9f9f9;
+            border-radius: 8px;
+        }
+
+        .table {
+            font-size: 12px;
+        }
+
+        .table th {
+            background-color: #eee;
+        }
+
+        .table td,
+        .table th {
+            padding: .6rem;
+
+        }
+
+        @media print {
+            .d-print-full {
+                width: 100%;
+            }
+
+            .container,
+            .container-lg,
+            .container-md,
+            .container-sm,
+            .container-xl,
+            .container-xxl {
+                max-width: 95%;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container py-4">
+
+        <div class="row">
+            <div class="col-md-4 mt-3 d-print-none">
+                <div class="box">
+
+                    <form id="yearMonthForm" method="get">
+                        <div class="form-row">
+                            <div class="form-group col-md-12 mb-3">
+                                <label for="year">Year</label>
+                                <select class="form-control" id="year" name="year">
+                                    <!-- JavaScript will populate the year options -->
+                                </select>
+                            </div>
+                            <div class="form-group col-md-12 mb-3">
+                                <label for="month">Month</label>
+                                <select class="form-control" id="month" name="month">
+                                    <!-- JavaScript will populate the month options -->
+                                </select>
+                            </div>
+                        </div>
+                        <button type="submit" class="btn btn-primary">Change</button>
+                    </form>
+                </div>
+
+            </div>
+
+            <div class="col-md-8 mt-3 d-print-full">
+                <div class="box">
+                    <h1 class="text-center mb-0">Daybook for {{ month }}</h1>
+                </div>
+
+                {% for day, transactions in daywise_transactions.items %}
+
+                {% if transactions.payments or transactions.vouchers %}
+                <div class="mt-5 border border-dark">
+                    <div class="card card-body border-0">
+                        <h2 class="mb-0">{{ day|date:"F d, Y" }}</h2>
+                    </div>
+
+                    <table class="table mb-0 border-bottom border-top border-dark">
+                        <tr>
+                            <th>OPENING BALANCE BANK</th>
+                            <th class="income">{{ transactions.total_bank_income|intcomma }}</th>
+                            <th>OPENING BALANCE CASH</th>
+                            <th class="income">{{ transactions.total_cash_income|intcomma }}</th>
+                        </tr>
+                    </table>
+
+
+                    {% if transactions.payments %}
+                    <table class="table table-bordered mb-0">
+                        <thead>
+                            <tr>
+                                <th>Reciept Number</th>
+                                <th>Payments: Applicant</th>
+                                <th>Amount</th>
+                                <th>Mode</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <!-- Display payment transactions for the day -->
+                            {% for payment in transactions.payments %}
+                            <tr>
+                                <td>{{ payment.reciept_number }}</td>
+                                <td>{{ payment.applicant }}</td>
+                                <td class="amount">{{ payment.amount }}</td>
+                                <td>{{ payment.mode }}</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                    {% endif %}
+
+                    {% if transactions.vouchers %}
+                    <table class="table table-bordered mb-0">
+                        <thead>
+                            <tr>
+                                <th>Voucher Number</th>
+                                <th>Vouchers: Purpose</th>
+                                <th>Amount</th>
+                                <th>Mode</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <!-- Display voucher transactions for the day -->
+                            {% for voucher in transactions.vouchers %}
+                            <tr>
+                                <td>{{ voucher.voucher_number }}</td>
+                                <td>{{ voucher.purpose }}</td>
+                                <td class="amount">{{ voucher.amount }}</td>
+                                <td>{{ voucher.mode }}</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                    {% endif %}
+
+                    <table class="table table-bordered mb-0">
+                        <tr>
+                            <th>BANK INCOME</th>
+                            <th class="income">{{ transactions.total_bank_income|intcomma }}</th>
+                            <th>CASH INCOME</th>
+                            <th class="income">{{ transactions.total_cash_income|intcomma }}</th>
+                        </tr>
+                        <tr>
+                            <th>BANK EXPENSES</th>
+                            <th class="expenses">{{ transactions.total_bank_expenses|intcomma }}</th>
+                            <th>CASH EXPENSES</th>
+                            <th class="expenses">{{ transactions.total_cash_expenses|intcomma }}</th>
+                        </tr>
+                        <tr>
+                            <th>BANK BALANCE</th>
+                            <th class="balance">{{ transactions.total_bank_balance|intcomma }}</th>
+                            <th>CASH BALANCE</th>
+                            <th class="balance">{{ transactions.total_cash_balance|intcomma }}</th>
+                        </tr>
+                    </table>
+
+                </div>
+                {% endif %}
+
+                {% endfor %}
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <script>
+        // JavaScript to populate year and month select options
+        const yearSelect = document.getElementById("year");
+        const monthSelect = document.getElementById("month");
+
+        // Populate the year select with options from current year to 1900
+        const currentYear = new Date().getFullYear();
+        for (let year = currentYear; year >= 1900; year--) {
+            const option = document.createElement("option");
+            option.value = year;
+            option.text = year;
+            yearSelect.appendChild(option);
+        }
+
+        // Populate the month select with options from 1 to 12 with names
+        const monthNames = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+        for (let month = 1; month <= 12; month++) {
+            const option = document.createElement("option");
+            option.value = month;
+            option.text = monthNames[month - 1];
+            monthSelect.appendChild(option);
+        }
+    </script>
+</body>
+
+</html>
