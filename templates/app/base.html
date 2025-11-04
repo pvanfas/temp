@@ -132,18 +132,15 @@
     <script src="{% static 'app/js/script.js' %}?v=1.9"></script>
     {% block javascript %}{% endblock %}
     <script>
-      // if any .slide-menu is empty, then hide closest .slide
-      $('.slide-menu').each(function () {
-        if ($(this).children().length == 0) {
-          $(this).closest('.slide').hide();
-        }
-      });
-    </script>
-    <script>
       var elements = document.getElementsByClassName('lightgallery');
       for (let item of elements) {
           lightGallery(item, {share:false})
       }
+    </script>
+        <script>
+      $('.form-group').contents().filter(function() {
+          return this.nodeType === 3 && $.trim(this.nodeValue) === '[]';
+      }).remove();
     </script>
 
 </body>
