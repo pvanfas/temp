@@ -8,6 +8,7 @@ urlpatterns = [
     path("id_card/<str:pk>/", views.IDCard.as_view(), name="id_card"),
     path("bulk_id_card/<str:pk>/", views.BulkIDCard.as_view(), name="bulk_id_card"),
     path("bulk_reciepts/<str:pk>/", views.BulkReciept.as_view(), name="bulk_reciepts"),
+    path("bulk_vouchers/<str:pk>/", views.BulkVoucher.as_view(), name="bulk_vouchers"),
     path("bulk_tags/<str:pk>/", views.BulkTags.as_view(), name="bulk_tags"),
     path("reciept/<str:pk>/", views.Reciept.as_view(), name="reciept"),
     path("voucher/<str:pk>/", views.VoucherView.as_view(), name="voucher"),

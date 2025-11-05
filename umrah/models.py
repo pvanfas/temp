@@ -101,6 +101,10 @@ class Batch(BaseModel):
         url = reverse_lazy("umrah:bulk_reciepts", kwargs={"pk": self.pk})
         return mark_safe(f"<a href='{url}' class='btn btn-sm btn-light btn-outline-success' target='_blank'>Reciepts</a>")
 
+    def bulk_vouchers(self):
+        url = reverse_lazy("umrah:bulk_vouchers", kwargs={"pk": self.pk})
+        return mark_safe(f"<a href='{url}' class='btn btn-sm btn-light btn-outline-success' target='_blank'>Vouchers</a>")
+
     def bulk_tags(self):
         url = reverse_lazy("umrah:bulk_tags", kwargs={"pk": self.pk})
         return mark_safe(f"<a href='{url}' class='btn btn-sm btn-light btn-outline-success' target='_blank'>Tags</a>")

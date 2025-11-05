@@ -118,6 +118,27 @@ class BulkReciept(PDFView, LoginRequiredMixin):
         return context
 
 
+class BulkVoucher(PDFView, LoginRequiredMixin):
+    template_name = "umrah/bulk_vouchers.html"
+    pdfkit_options = {
+        "page-height": "297",
+        "page-width": "210",
+        "encoding": "UTF-8",
+        "margin-top": "0",
+        "margin-bottom": "0",
+        "margin-left": "0",
+        "margin-right": "0",
+    }
+
+    def get_context_data(self, *args, **kwargs):
+        context = super().get_context_data(*args, **kwargs)
+        batch = get_object_or_404(Batch, pk=self.kwargs["pk"])
+        queryset = Voucher.objects.filter(batch=batch)
+        context["batch"] = batch
+        context["queryset"] = queryset
+        return context
+
+
 class VoucherView(PDFView, LoginRequiredMixin):
     template_name = "umrah/voucher.html"
     pdfkit_options = {

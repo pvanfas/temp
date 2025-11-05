@@ -106,6 +106,7 @@ class BatchAdmin(CustomAdmin):
         "created_at",
         "bulk_id_card",
         "bulk_reciepts",
+        "bulk_vouchers",
         "bulk_tags",
         "applicants_count",
         "amount",

@@ -13,9 +13,14 @@ class AgencyTable(BaseTable):
 
 
 class BatchTable(BaseTable):
+    bulk_id_card = columns.Column(verbose_name="Download", orderable=False)
+    bulk_reciepts = columns.Column(verbose_name="Download", orderable=False)
+    bulk_vouchers = columns.Column(verbose_name="Download", orderable=False)
+    bulk_tags = columns.Column(verbose_name="Download", orderable=False)
+
     class Meta:
         model = Batch
-        fields = ("name", "year", "applicants_count", "code", "bulk_id_card", "bulk_reciepts", "bulk_tags")
+        fields = ("name", "year", "applicants_count", "code", "bulk_id_card", "bulk_reciepts", "bulk_vouchers", "bulk_tags")
         attrs = {"class": "table key-buttons border-bottom table-hover nowrap"}  # noqa: RUF012
 
 
