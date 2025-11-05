@@ -22,9 +22,9 @@ $(function(e){
 				label: 'Total Closed Tickets',
 				data: [28,22,21,18,13,22,24,18,16,21,18,24],
 				borderWidth: 3,
-				backgroundColor: '#3366ff',
-				borderColor: '#3366ff',
-				pointBackgroundColor: '#3366ff',
+				backgroundColor: '#7512e9',
+				borderColor: '#7512e9',
+				pointBackgroundColor: '#7512e9',
 				pointRadius: 0,
 				type: 'bar',
 

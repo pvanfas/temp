@@ -168,7 +168,7 @@ function overview(){
 			}
 		}],
 		labels: ["Applications","Interviews", "Reject", "Hired"],
-		colors: [ myVarVal, '#fe7f00', '#f7284a', '#0dcd94'],
+		colors: [ myVarVal, '#fe7f00', '#f7284a', '#27ad37'],
 	};
 	document.getElementById('overview').innerHTML = ''; 
 	var chart = new ApexCharts(document.querySelector("#overview"), options);

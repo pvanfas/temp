@@ -12,7 +12,7 @@
 			// Set default plots and areas style
 			, defaultPlot: {
 				attrs: {
-					fill: "#3366ff"
+					fill: "#7512e9"
 					, opacity: 0.6
 				}
 				, attrsHover: {
@@ -117,8 +117,8 @@
 				text: {
 					content: "My plot"
 					, position: "bottom"
-					, attrs: {"font-size": 10, fill: "#3366ff", opacity: 0.6}
-					, attrsHover: {fill: "#3366ff", opacity: 1}
+					, attrs: {"font-size": 10, fill: "#7512e9", opacity: 0.6}
+					, attrsHover: {fill: "#7512e9", opacity: 1}
 				},
 			},
 			'Bordeaux': {
@@ -184,7 +184,7 @@
 						min: 500000,
 						max: 1000000,
 						attrs: {
-							fill: "#3366ff"
+							fill: "#7512e9"
 						},
 						label: "Between 500 000 and 1 000 000 inhabitants"
 					},

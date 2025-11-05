@@ -123,7 +123,7 @@
 			backgroundColor: null,
 			regionStyle : {
 				initial : {
-					fill : '#3366ff'
+					fill : '#7512e9'
 				}
 			},
 

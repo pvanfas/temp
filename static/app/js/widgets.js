@@ -92,7 +92,7 @@ $(function(e){
       yaxis: {
         min: 0
       },
-      colors: ['#3366ff'],
+      colors: ['#7512e9'],
 
     }
 	var spark1 = new ApexCharts(document.querySelector("#spark1"), spark1);

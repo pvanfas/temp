@@ -74,7 +74,7 @@ $(function(e){
       }
     },
     series: chartdata,
-    color:[ '#3366ff','#01c353', '#fe7f00',]
+    color:[ '#7512e9','#01c353', '#fe7f00',]
   };
 
   barChart.setOption(option);
@@ -90,7 +90,7 @@ $(function(e){
       type: 'line',
 	  smooth: true,
       data: [12, 25, 12, 35, 12, 38],
-	  color:[ '#3366ff']
+	  color:[ '#7512e9']
     },
     {
       name: 'Profit',
@@ -191,7 +191,7 @@ $(function(e){
       }
     },
     series: chartdata,
-	color:[ '#3366ff','#01c353', '#fe7f00',]
+	color:[ '#7512e9','#01c353', '#fe7f00',]
 	};
 
   var chart3 = document.getElementById('echart3');
@@ -243,7 +243,7 @@ $(function(e){
       }
     },
     series: chartdata2,
-    color:[ '#3366ff', '#fe7f00','#01c353']
+    color:[ '#7512e9', '#fe7f00','#01c353']
   };
 
   var chart4 = document.getElementById('echart4');
@@ -307,7 +307,7 @@ $(function(e){
       }
     },
     series: chartdata3,
-	color:[ '#3366ff', '#fe7f00']
+	color:[ '#7512e9', '#fe7f00']
   };
 
   var chart5 = document.getElementById('echart5');
@@ -359,7 +359,7 @@ $(function(e){
       }
     },
     series: chartdata3,
-	color:[ '#3366ff', '#fe7f00']
+	color:[ '#7512e9', '#fe7f00']
   };
 
   var chart6 = document.getElementById('echart6');
@@ -416,7 +416,7 @@ $(function(e){
       }
     },
     series: chartdata4,
-	color:[ '#3366ff']
+	color:[ '#7512e9']
   };
 
   var chart7 = document.getElementById('echart7');

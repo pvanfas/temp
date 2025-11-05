@@ -151,7 +151,7 @@ function analysis(){
 			}
 		}],
 		labels: ["Design","Development" , "Service"],
-		colors: [myVarVal, '#fe7f00' , '#0dcd94'],
+		colors: [myVarVal, '#fe7f00' , '#27ad37'],
 	};
 	document.getElementById('analysis').innerHTML = ''; 
 	var chart = new ApexCharts(document.querySelector("#analysis"), options);

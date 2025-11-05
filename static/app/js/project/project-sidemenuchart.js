@@ -14,14 +14,14 @@ $(function(e){
 				label: "Expenses",
 				data: [40, 42, 35, 30, 32, 39, 40],
 				backgroundColor: 'rgba(45, 53, 160, 0.04)',
-				borderColor: '#3366ff',
+				borderColor: '#7512e9',
 				pointBackgroundColor:'#fff',
 				pointBorderWidth :2,
 				pointRadius :0,
 				pointHoverRadius :5,
 				borderWidth: 2,
                 pointStyle: 'circle',
-                pointBorderColor: '#3366ff',
+                pointBorderColor: '#7512e9',
 				pointBackgroundColor: '#fff',
 
 			}, {

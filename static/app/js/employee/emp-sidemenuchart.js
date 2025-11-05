@@ -18,7 +18,7 @@ $(function(e){
 				pointBorderWidth :2,
 				pointRadius :0,
 				pointHoverRadius :4,
-				pointHoverBackgroundColor:'#3366ff',
+				pointHoverBackgroundColor:'#7512e9',
 			}
 			]
 		},

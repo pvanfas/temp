@@ -44,7 +44,7 @@ class BaseAdmin(ImportExportActionModelAdmin):
 
 
 class BaseTable(Table):
-    serial = columns.Column(empty_values=(), verbose_name="S.No")
+    serial = columns.Column(empty_values=(), verbose_name="S.No", orderable=False)
     pk = columns.Column(visible=False)
     action = columns.TemplateColumn(template_name="app/partials/table_actions.html", orderable=False)
 

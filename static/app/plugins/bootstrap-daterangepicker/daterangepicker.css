@@ -161,7 +161,7 @@
 	border-radius: 4px
 }
 .daterangepicker td.active, .daterangepicker td.active:hover {
-	background-color: #3366ff;
+	background-color: #7512e9;
 	border-color: transparent;
 	color: #fff
 }
@@ -254,7 +254,7 @@
 	background-color: #e5e9f2
 }
 .daterangepicker .ranges li.active {
-	background-color: #3366ff;
+	background-color: #7512e9;
 	color: #fff;
 }
 @media (min-width:564px) {

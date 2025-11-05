@@ -21,6 +21,16 @@ class BatchTable(BaseTable):
 
 class ApplicantTable(BaseTable):
     action = columns.TemplateColumn(template_name="umrah/partials/applicant_table_actions.html", orderable=False)
+    image_tag = columns.Column(orderable=False)
+    fullname = columns.Column(orderable=False)
+    whatsapp_link = columns.Column(orderable=False)
+    id_card = columns.Column(orderable=False)
+    expiry_validity = columns.Column(orderable=False)
+    balance_amount = columns.Column(orderable=False)
+    age = columns.Column(orderable=False)
+    total_amount = columns.Column(orderable=False)
+    payable_amount = columns.Column(orderable=False)
+    paid_amount = columns.Column(orderable=False)
 
     class Meta:
         model = Applicant

@@ -278,7 +278,7 @@ var options = {
 			[1361919600000, 39.60],
 		]
 	}],
-	colors: ['#3366ff'],
+	colors: ['#7512e9'],
 	chart: {
 		id: 'area-datetime',
 		type: 'area',
@@ -351,7 +351,7 @@ var options1 = {
 		name: 'series2',
 		data: [11, 32, 45, 32, 34, 52, 41]
 	}],
-	colors: ['#3366ff','#fe7f00'],
+	colors: ['#7512e9','#fe7f00'],
 	chart: {
 		height: 300,
 		type: 'area'
@@ -382,7 +382,7 @@ var options2 = {
 	series: [{
 		data: [400, 430, 448, 470, 540, 580, 690, 1100, 1200, 1380]
 	}],
-	colors: ['#3366ff','#fe7f00'],
+	colors: ['#7512e9','#fe7f00'],
 	chart: {
 		type: 'bar',
 		height: 300,
@@ -421,7 +421,7 @@ var options3 = {
 		name: 'Reborn Kid',
 		data: [9, 7, 5, 8, 6, 9, 4]
 	}],
-	colors: ['#3366ff', '#01c353', '#ffad00', '#fe7f00', '#f11541'],
+	colors: ['#7512e9', '#01c353', '#ffad00', '#fe7f00', '#f11541'],
 	chart: {
 		type: 'bar',
 		height: 300,
@@ -470,7 +470,7 @@ var chart3 = new ApexCharts(document.querySelector("#chart3"), options3);
 chart3.render();
 var options4 = {
 	series: [44, 55, 41, 17, 15],
-	colors: ['#3366ff', '#01c353', '#ffad00', '#fe7f00', '#f11541'],
+	colors: ['#7512e9', '#01c353', '#ffad00', '#fe7f00', '#f11541'],
 	chart: {
 		height: 300,
 		type: 'donut',
@@ -497,7 +497,7 @@ var chart4 = new ApexCharts(document.querySelector("#chart4"), options4);
 chart4.render();
 var options5 = {
 	series: [44, 55, 13, 43, 22],
-	colors: ['#3366ff', '#01c353', '#ffad00', '#fe7f00', '#f11541'],
+	colors: ['#7512e9', '#01c353', '#ffad00', '#fe7f00', '#f11541'],
 	chart: {
 		height: 300,
 		type: 'pie',
@@ -537,7 +537,7 @@ var options6 = {
         }
       }
     },
-	colors: ['#3366ff'],
+	colors: ['#7512e9'],
 	chart: {
 		height: 300,
 		type: 'radar',
@@ -572,7 +572,7 @@ var options7 = {
 		name: 'Series 3',
 		data: [44, 76, 78, 13, 43, 10],
 	}],
-	colors: ['#3366ff', '#01c353', '#ffad00', '#fe7f00', '#f11541'],
+	colors: ['#7512e9', '#01c353', '#ffad00', '#fe7f00', '#f11541'],
 	chart: {
 		height: 300,
 		type: 'radar',
@@ -615,7 +615,7 @@ var options8 = {
 		},
 	},
 	labels: ['Sales'],
-	colors: ['#3366ff'],
+	colors: ['#7512e9'],
 	responsive: [{
 		options: {
 			legend: {
@@ -653,7 +653,7 @@ var options9 = {
 		}
 	},
 	labels: ['data1', 'data1', 'data1', 'data1'],
-	colors: ['#3366ff', '#01c353', '#ffad00', '#fe7f00', '#f11541'],
+	colors: ['#7512e9', '#01c353', '#ffad00', '#fe7f00', '#f11541'],
 };
 var chart9 = new ApexCharts(document.querySelector("#chart9"), options9);
 chart9.render();

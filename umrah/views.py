@@ -225,6 +225,7 @@ class BatchListView(HybridListView):
     filterset_fields = ("name", "is_completed")
     table_class = BatchTable
     search_fields = ("name",)
+    exclude_columns = ("pk", "action", "bulk_id_card", "bulk_reciepts", "bulk_tags")
 
 
 class BatchCreateView(HybridCreateView):
@@ -300,9 +301,11 @@ class ApplicantDeleteView(HybridDeleteView):
 
 class UmrahPaymentListView(HybridListView):
     model = UmrahPayment
-    filterset_fields = ("applicant", "is_archived")
+    filterset_fields = ("applicant",  "applicant__batch", "applicant__agency", "is_archived")
     table_class = UmrahPaymentTable
     search_fields = ("applicant",)
+    title = "Payment Receipts"
+    exclude_columns = ("pk", "action", "reciept")
 
     def get_queryset(self):
         return super().get_queryset().filter(is_archived=False)
@@ -360,7 +363,7 @@ class PaymentPurposeDeleteView(HybridDeleteView):
 
 class VoucherListView(HybridListView):
     model = Voucher
-    filterset_fields = ("voucher_number", "batch", "batch__year", "amount", "date", "mode")
+    filterset_fields = ("voucher_number","purpose", "batch", "batch__year", "amount", "date", "mode")
     table_class = VoucherTable
     search_fields = ("voucher_number",)
 

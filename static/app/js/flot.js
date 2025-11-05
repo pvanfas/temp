@@ -19,10 +19,10 @@ $(function() {
 			bars: {
 				show: true,
 				lineWidth: 0,
-				fillColor: '#3366ff',
+				fillColor: '#7512e9',
 				barWidth: .5
 			},
-			highlightColor: '#3366ff'
+			highlightColor: '#7512e9'
 		},
 		grid: {
 			borderWidth: 1,
@@ -76,7 +76,7 @@ $(function() {
 		bars: {
 			show: true,
 			lineWidth: 0,
-			fillColor: '#3366ff',
+			fillColor: '#7512e9',
 			barWidth: .8
 		}
 	}], {
@@ -124,7 +124,7 @@ $(function() {
 	}, {
 		data: retCust,
 		label: 'Returning Customer',
-		color: '#3366ff'
+		color: '#7512e9'
 	}], {
 		series: {
 			lines: {
@@ -170,7 +170,7 @@ $(function() {
 	}, {
 		data: retCust,
 		label: 'Returning Customer',
-		color: '#3366ff'
+		color: '#7512e9'
 	}], {
 		series: {
 			lines: {
@@ -213,7 +213,7 @@ $(function() {
 	var plot = $.plot($('#flotArea1'), [{
 		data: newCust,
 		label: 'New Customer',
-		color: '#3366ff'
+		color: '#7512e9'
 	}, {
 		data: retCust,
 		label: 'Returning Customer',
@@ -268,7 +268,7 @@ $(function() {
 	var plot = $.plot($('#flotArea2'), [{
 		data: newCust,
 		label: 'New Customer',
-		color: '#3366ff'
+		color: '#7512e9'
 	}, {
 		data: retCust,
 		label: 'Returning Customer',
@@ -326,7 +326,7 @@ $(function() {
 		data: [
 			[1, 10]
 		],
-		color: '#3366ff'
+		color: '#7512e9'
 	}, {
 		label: 'Series 2',
 		data: [
