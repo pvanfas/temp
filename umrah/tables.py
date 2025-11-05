@@ -87,6 +87,6 @@ class VoucherTable(BaseTable):
 
     class Meta:
         model = Voucher
-        fields = ("checkbox", "serial", "voucher_number", "batch", "amount", "date", "purpose")
+        fields = ("checkbox", "serial", "voucher_number", "batch", "amount", "date", "purpose", "voucher")
         attrs = {"class": "table key-buttons border-bottom table-hover"}  # noqa: RUF012
         sequence = ("checkbox", "serial", "...", "action")

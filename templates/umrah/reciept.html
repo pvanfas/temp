@@ -43,52 +43,52 @@
 				<tr>
 					<td style="width: 25%;padding:10px;border-right:1px dashed #000;border-bottom:1px dashed #000">
 						<div style="">
-							<div style="padding: 12px;margin: 0 auto;max-width: 180px;text-align: center;">
+							<div style="padding: 8px;margin: 0 auto;max-width: 200px;text-align: center;">
 								<!-- Header -->
 								<div style="border-bottom: 2px solid #000;padding-bottom: 8px;margin-bottom: 12px;">
 									<h2 style="font-size: 11px;font-weight: 700;margin: 0 0 4px 0;text-transform: uppercase;letter-spacing: 0.5px;">COUNTERFOIL</h2>
-									<p style="font-size: 7px;margin: 0;font-weight: 400;">KERALA NADVATHUL MUJAHIDEEN (KHUS)</p>
+									<p style="font-size: 9px;margin: 0;font-weight: 400;">KERALA NADVATHUL MUJAHIDEEN (KHUS)</p>
 								</div>
 								
 								<!-- Receipt Number -->
 								<div style="margin-bottom: 12px;">
-									<p style="font-size: 7px;margin: 0 0 3px 0;font-weight: 400;">RECEIPT NO</p>
+									<p style="font-size: 9px;margin: 0 0 3px 0;font-weight: 400;">RECEIPT NO</p>
 									<h1 style="font-size: 16px;font-weight: 700;margin: 0;letter-spacing: 1px;">{{object.reciept_number}}</h1>
 								</div>
 								
 								<!-- Details -->
 								<div style="border-top: 1px solid #000;border-bottom: 1px solid #000;padding: 8px 0;margin-bottom: 12px;">
-									<div style="margin-bottom: 6px;text-align: left;">
-										<p style="font-size: 6px;margin: 0 0 1px 0;font-weight: 400;color: #666;">DATE</p>
-										<p style="font-size: 8px;margin: 0;font-weight: 600;">{{object.date}}</p>
+									<div style="margin-bottom: 8px;text-align: left;">
+										<p style="font-size: 9px;margin: 0 0 2px 0;font-weight: 400;color: #666;">DATE</p>
+										<p style="font-size: 9px;margin: 0;font-weight: 600;">{{object.date}}</p>
 									</div>
 									
-									<div style="margin-bottom: 6px;text-align: left;">
-										<p style="font-size: 6px;margin: 0 0 1px 0;font-weight: 400;color: #666;">BATCH</p>
-										<p style="font-size: 8px;margin: 0;font-weight: 600;">{{object.applicant.batch.name}}</p>
+									<div style="margin-bottom: 8px;text-align: left;">
+										<p style="font-size: 9px;margin: 0 0 2px 0;font-weight: 400;color: #666;">BATCH</p>
+										<p style="font-size: 9px;margin: 0;font-weight: 600;">{{object.applicant.batch.name}}</p>
 									</div>
 									
-									<div style="margin-bottom: 6px;text-align: left;">
-										<p style="font-size: 6px;margin: 0 0 1px 0;font-weight: 400;color: #666;">NAME</p>
-										<p style="font-size: 8px;margin: 0;font-weight: 600;text-transform: uppercase;word-wrap: break-word;">
+									<div style="margin-bottom: 8px;text-align: left;">
+										<p style="font-size: 9px;margin: 0 0 2px 0;font-weight: 400;color: #666;">NAME</p>
+										<p style="font-size: 9px;margin: 0;font-weight: 600;text-transform: uppercase;word-wrap: break-word;">
 											{% if object.applicant.first_name %}{{object.applicant.first_name}}{% endif %} {% if object.applicant.last_name %}{{object.applicant.last_name}}{% endif %}
 										</p>
 									</div>
 									
-									<div style="margin-bottom: 6px;text-align: left;">
-										<p style="font-size: 6px;margin: 0 0 1px 0;font-weight: 400;color: #666;">PASSPORT</p>
-										<p style="font-size: 8px;margin: 0;font-weight: 600;">{{object.applicant.passport_number}}</p>
+									<div style="margin-bottom: 8px;text-align: left;">
+										<p style="font-size: 9px;margin: 0 0 2px 0;font-weight: 400;color: #666;">PASSPORT</p>
+										<p style="font-size: 9px;margin: 0;font-weight: 600;">{{object.applicant.passport_number}}</p>
 									</div>
 									
-									<div style="margin-bottom: 6px;text-align: left;">
-										<p style="font-size: 6px;margin: 0 0 1px 0;font-weight: 400;color: #666;">MODE</p>
-										<p style="font-size: 8px;margin: 0;font-weight: 600;">{{object.mode}}</p>
+									<div style="margin-bottom: 8px;text-align: left;">
+										<p style="font-size: 9px;margin: 0 0 2px 0;font-weight: 400;color: #666;">MODE</p>
+										<p style="font-size: 9px;margin: 0;font-weight: 600;">{{object.mode}}</p>
 									</div>
 								</div>
 								
 								<!-- Amount -->
 								<div style="background: #f0f0f0;padding: 8px;border: 1px solid #000;margin-bottom: 8px;">
-									<p style="font-size: 6px;margin: 0 0 4px 0;font-weight: 400;">AMOUNT</p>
+									<p style="font-size: 9px;margin: 0 0 4px 0;font-weight: 400;">AMOUNT</p>
 									<p style="font-size: 14px;margin: 0;font-weight: 700;">
 										&#8377; {{object.amount}}
 									</p>

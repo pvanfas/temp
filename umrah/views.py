@@ -366,6 +366,8 @@ class VoucherListView(HybridListView):
     filterset_fields = ("voucher_number","purpose", "batch", "batch__year", "amount", "date", "mode")
     table_class = VoucherTable
     search_fields = ("voucher_number",)
+    title = "Vouchers"
+    exclude_columns = ("pk", "action", "reciept")
 
     def get_queryset(self):
         return super().get_queryset().filter(is_archived=False)
