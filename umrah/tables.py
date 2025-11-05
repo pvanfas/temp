@@ -45,14 +45,17 @@ class ApplicantTable(BaseTable):
 
 
 class UmrahPaymentTable(BaseTable):
-    checkbox = columns.CheckBoxColumn(accessor="pk", orderable=False)
+    checkbox = columns.TemplateColumn(
+        '<div class="checkbox-column"><div class="round"><input type="checkbox" id="checkbox-{{ record.pk }}" value="{{ record.pk }}" /><label for="checkbox-{{ record.pk }}"></label></div></div>',
+        orderable=False,
+    )
     applicant = columns.Column(accessor="applicant.fullname", orderable=False, linkify=True)
 
     class Meta:
         model = UmrahPayment
-        fields = ("checkbox", "reciept_number", "applicant", "amount", "date", "mode", "reciept")
+        fields = ("checkbox", "serial", "reciept_number", "applicant", "amount", "date", "mode", "reciept")
         attrs = {"class": "table key-buttons border-bottom table-hover"}  # noqa: RUF012
-        sequence = ("checkbox", "...", "action")
+        sequence = ("checkbox", "serial", "...", "action")
 
 
 class PaymentPurposeTable(BaseTable):
@@ -66,11 +69,14 @@ class PaymentPurposeTable(BaseTable):
 
 
 class VoucherTable(BaseTable):
-    checkbox = columns.CheckBoxColumn(accessor="pk", orderable=False)
+    checkbox = columns.TemplateColumn(
+        '<div class="checkbox-column"><div class="round"><input type="checkbox" id="checkbox-{{ record.pk }}" value="{{ record.pk }}" /><label for="checkbox-{{ record.pk }}"></label></div></div>',
+        orderable=False,
+    )
     batch = columns.Column(verbose_name="Batch", orderable=True, linkify=True)
 
     class Meta:
         model = Voucher
-        fields = ("checkbox", "voucher_number", "batch", "amount", "date", "purpose")
+        fields = ("checkbox", "serial", "voucher_number", "batch", "amount", "date", "purpose")
         attrs = {"class": "table key-buttons border-bottom table-hover"}  # noqa: RUF012
-        sequence = ("checkbox", "...", "action")
+        sequence = ("checkbox", "serial", "...", "action")
