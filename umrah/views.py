@@ -2,10 +2,12 @@ import calendar
 from datetime import datetime, timedelta
 from decimal import Decimal
 
+from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.db.models import Sum
-from django.shortcuts import get_object_or_404, render
+from django.shortcuts import get_object_or_404, redirect, render
+from django.utils.translation import gettext_lazy as _, ngettext
 from num2words import num2words
 
 from core.mixins import HybridCreateView, HybridDeleteView, HybridDetailView, HybridListView, HybridUpdateView
@@ -389,9 +391,45 @@ class VoucherListView(HybridListView):
     search_fields = ("voucher_number",)
     title = "Vouchers"
     exclude_columns = ("pk", "action", "reciept")
+    metadata = {
+        "actions": [
+            {"label": _("Archive selected"), "value": "archive"},
+        ]
+    }
 
     def get_queryset(self):
         return super().get_queryset().filter(is_archived=False)
+
+    def post(self, request, *args, **kwargs):
+        action = request.POST.get("action")
+        selected_raw = request.POST.get("selected_objects", "")
+        selected_ids = [value.strip() for value in selected_raw.split(",") if value.strip()]
+
+        if action != "archive":
+            messages.warning(request, _("Please choose a valid action."))
+            return redirect(request.get_full_path())
+
+        if not selected_ids:
+            messages.warning(request, _("Select at least one voucher before running the action."))
+            return redirect(request.get_full_path())
+
+        queryset = self.model.objects.filter(pk__in=selected_ids, is_archived=False)
+        updated = queryset.update(is_archived=True)
+
+        if updated:
+            messages.success(
+                request,
+                ngettext(
+                    "%d voucher was archived successfully.",
+                    "%d vouchers were archived successfully.",
+                    updated,
+                )
+                % updated,
+            )
+        else:
+            messages.info(request, _("No vouchers were archived. They might already be archived."))
+
+        return redirect(self.model.get_list_url())
 
 
 class VoucherArchivedListView(HybridListView):

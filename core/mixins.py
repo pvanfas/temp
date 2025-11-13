@@ -112,6 +112,7 @@ class HybridListView(LoginRequiredMixin, ExportMixin, SingleTableMixin, FilterVi
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
+        print(self.template_name)
         context["title"] = self.title if hasattr(self, "title") else self.model._meta.verbose_name_plural
         context["can_add"] = True
         context["create_url"] = self.model.get_create_url() if hasattr(self.model, "get_create_url") else None

@@ -3,12 +3,12 @@
     "short_name": "KNM",
     "icons": [
         {
-            "src": "/static/app/config/android-chrome-192x192.png",
+            "src": "/static/app/config/favicon.png",
             "sizes": "192x192",
             "type": "image/png"
         },
         {
-            "src": "/static/app/config/android-chrome-512x512.png",
+            "src": "/static/app/config/favicon.png",
             "sizes": "512x512",
             "type": "image/png"
         }
