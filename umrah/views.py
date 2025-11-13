@@ -1,12 +1,18 @@
 
+from collections import OrderedDict
+from datetime import datetime
+from decimal import Decimal
+
 from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.db.models import Sum
 from django.shortcuts import get_object_or_404, redirect
 from django.urls import reverse
 from django.utils.translation import gettext_lazy as _, ngettext
+from django.utils import timezone
 from num2words import num2words
 
-from core.mixins import HybridCreateView, HybridDeleteView, HybridDetailView, HybridListView, HybridUpdateView
+from core.mixins import HybridCreateView, HybridDeleteView, HybridDetailView, HybridListView, HybridTemplateView, HybridUpdateView
 from core.pdfview import PDFView
 
 from .forms import UmrahPaymentForm
@@ -534,6 +540,129 @@ class PrintSelectedVouchers(PDFView, LoginRequiredMixin):
         else:
             queryset = Voucher.objects.filter(pk__in=voucher_ids).order_by("voucher_number")
         context["queryset"] = queryset
+        return context
+
+
+class CashDaybookView(HybridTemplateView):
+    template_name = "umrah/daybook.html"
+    title = "Cash Daybook"
+
+    @staticmethod
+    def _parse_date(value):
+        if not value:
+            return None
+        try:
+            return datetime.strptime(value, "%Y-%m-%d").date()
+        except (TypeError, ValueError):
+            return None
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        today = timezone.localdate()
+        start_date = self._parse_date(self.request.GET.get("start_date")) or today.replace(day=1)
+        end_date = self._parse_date(self.request.GET.get("end_date")) or today
+
+        if start_date > end_date:
+            start_date, end_date = end_date, start_date
+
+        base_payments = (
+            UmrahPayment.objects.filter(mode="CASH", is_active=True, is_archived=False)
+            .select_related("applicant", "applicant__batch")
+        )
+        base_vouchers = (
+            Voucher.objects.filter(mode="CASH", is_active=True, is_archived=False)
+            .select_related("batch", "purpose")
+        )
+
+        payments = base_payments.filter(date__range=(start_date, end_date))
+        vouchers = base_vouchers.filter(date__range=(start_date, end_date))
+
+        payments_before = base_payments.filter(date__lt=start_date).aggregate(total=Sum("amount"))["total"] or Decimal("0.00")
+        vouchers_before = base_vouchers.filter(date__lt=start_date).aggregate(total=Sum("amount"))["total"] or Decimal("0.00")
+        opening_balance = Decimal("0.00") if (start_date.month == 11 and start_date.day == 1) else payments_before - vouchers_before
+
+        entries = []
+        zero = Decimal("0.00")
+
+        for payment in payments:
+            applicant = payment.applicant
+            batch_name = applicant.batch.name if applicant and applicant.batch else "-"
+            entries.append(
+                {
+                    "date": payment.date,
+                    "label": _("Receipt"),
+                    "number": payment.reciept_number or "-",
+                    "batch": batch_name,
+                    "head": applicant.get_name() if applicant else "-",
+                    "credit": payment.amount,
+                    "debit": zero,
+                    "notes": payment.notes,
+                    "created_at": payment.created_at,
+                    "sort_index": 0,
+                }
+            )
+
+        for voucher in vouchers:
+            batch = voucher.batch
+            entries.append(
+                {
+                    "date": voucher.date,
+                    "label": _("Voucher"),
+                    "number": voucher.voucher_number or "-",
+                    "batch": batch.name if batch else "-",
+                    "head": voucher.purpose.name if voucher.purpose else "-",
+                    "credit": zero,
+                    "debit": voucher.amount,
+                    "notes": voucher.notes,
+                    "created_at": voucher.created_at,
+                    "sort_index": 1,
+                }
+            )
+
+        entries.sort(key=lambda item: (item["date"], item["created_at"], item["sort_index"]))
+
+        running_balance = opening_balance
+        total_credit = zero
+        total_debit = zero
+        daily_totals = OrderedDict()
+        monthly_totals = OrderedDict()
+
+        for entry in entries:
+            credit = entry["credit"]
+            debit = entry["debit"]
+
+            total_credit += credit
+            total_debit += debit
+            running_balance += credit
+            running_balance -= debit
+            entry["balance"] = running_balance
+
+            day_key = entry["date"]
+            if day_key not in daily_totals:
+                daily_totals[day_key] = {"credit": zero, "debit": zero, "closing": zero}
+            daily_totals[day_key]["credit"] += credit
+            daily_totals[day_key]["debit"] += debit
+            daily_totals[day_key]["closing"] = running_balance
+
+            month_key = day_key.replace(day=1)
+            if month_key not in monthly_totals:
+                monthly_totals[month_key] = {"label": day_key.strftime("%B %Y"), "credit": zero, "debit": zero, "closing": zero}
+            monthly_totals[month_key]["credit"] += credit
+            monthly_totals[month_key]["debit"] += debit
+            monthly_totals[month_key]["closing"] = running_balance
+
+        context.update(
+            {
+                "entries": entries,
+                "filters": {"start_date": start_date, "end_date": end_date},
+                "opening_balance": opening_balance,
+                "closing_balance": running_balance,
+                "total_credit": total_credit,
+                "total_debit": total_debit,
+                "daily_summary": [{"date": key, **values} for key, values in daily_totals.items()],
+                "monthly_summary": [{"month": key, **values} for key, values in monthly_totals.items()],
+            }
+        )
         return context
 
 
