@@ -7,6 +7,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.db.models import Sum
 from django.shortcuts import get_object_or_404, redirect, render
+from django.urls import reverse
 from django.utils.translation import gettext_lazy as _, ngettext
 from num2words import num2words
 
@@ -120,6 +121,29 @@ class BulkReciept(PDFView, LoginRequiredMixin):
         return context
 
 
+class PrintSelectedPayments(PDFView, LoginRequiredMixin):
+    template_name = "umrah/bulk_reciepts.html"
+    pdfkit_options = {
+        "page-height": "297",
+        "page-width": "210",
+        "encoding": "UTF-8",
+        "margin-top": "0",
+        "margin-bottom": "0",
+        "margin-left": "0",
+        "margin-right": "0",
+    }
+
+    def get_context_data(self, *args, **kwargs):
+        context = super().get_context_data(*args, **kwargs)
+        payment_ids = self.request.GET.getlist("ids")
+        if not payment_ids:
+            queryset = UmrahPayment.objects.none()
+        else:
+            queryset = UmrahPayment.objects.filter(pk__in=payment_ids).order_by("-created_at")
+        context["queryset"] = queryset
+        return context
+
+
 class BulkVoucher(PDFView, LoginRequiredMixin):
     template_name = "umrah/bulk_vouchers.html"
     pdfkit_options = {
@@ -137,6 +161,29 @@ class BulkVoucher(PDFView, LoginRequiredMixin):
         batch = get_object_or_404(Batch, pk=self.kwargs["pk"])
         queryset = Voucher.objects.filter(batch=batch)
         context["batch"] = batch
+        context["queryset"] = queryset
+        return context
+
+
+class PrintSelectedVouchers(PDFView, LoginRequiredMixin):
+    template_name = "umrah/bulk_vouchers.html"
+    pdfkit_options = {
+        "page-height": "297",
+        "page-width": "210",
+        "encoding": "UTF-8",
+        "margin-top": "0",
+        "margin-bottom": "0",
+        "margin-left": "0",
+        "margin-right": "0",
+    }
+
+    def get_context_data(self, *args, **kwargs):
+        context = super().get_context_data(*args, **kwargs)
+        voucher_ids = self.request.GET.getlist("ids")
+        if not voucher_ids:
+            queryset = Voucher.objects.none()
+        else:
+            queryset = Voucher.objects.filter(pk__in=voucher_ids).order_by("voucher_number")
         context["queryset"] = queryset
         return context
 
@@ -324,14 +371,61 @@ class ApplicantDeleteView(HybridDeleteView):
 
 class UmrahPaymentListView(HybridListView):
     model = UmrahPayment
-    filterset_fields = ("applicant",  "applicant__batch", "applicant__agency", "is_archived")
+    filterset_fields = ("applicant", "applicant__batch", "applicant__agency", "is_archived")
     table_class = UmrahPaymentTable
     search_fields = ("applicant",)
     title = "Payment Receipts"
     exclude_columns = ("pk", "action", "reciept")
+    metadata = {
+        "actions": [
+            {"label": _("Archive selected"), "value": "archive"},
+            {"label": _("Print selected"), "value": "print"},
+        ]
+    }
 
     def get_queryset(self):
         return super().get_queryset().filter(is_archived=False)
+
+    def post(self, request, *args, **kwargs):
+        action = request.POST.get("action")
+        selected_raw = request.POST.get("selected_objects", "")
+        selected_ids = [value.strip() for value in selected_raw.split(",") if value.strip()]
+
+        if action == "print":
+            if not selected_ids:
+                messages.warning(request, _("Select at least one payment before printing."))
+                return redirect(request.get_full_path())
+            
+            # Redirect to print view with selected payment IDs
+            ids_param = "&".join([f"ids={pid}" for pid in selected_ids])
+            print_url = reverse("umrah:print_selected_payments") + "?" + ids_param
+            return redirect(print_url)
+
+        if action == "archive":
+            if not selected_ids:
+                messages.warning(request, _("Select at least one payment before running the action."))
+                return redirect(request.get_full_path())
+
+            queryset = self.model.objects.filter(pk__in=selected_ids, is_archived=False)
+            updated = queryset.update(is_archived=True)
+
+            if updated:
+                messages.success(
+                    request,
+                    ngettext(
+                        "%d payment was archived successfully.",
+                        "%d payments were archived successfully.",
+                        updated,
+                    )
+                    % updated,
+                )
+            else:
+                messages.info(request, _("No payments were archived. They might already be archived."))
+
+            return redirect(self.model.get_list_url())
+
+        messages.warning(request, _("Please choose a valid action."))
+        return redirect(request.get_full_path())
 
 
 class UmrahPaymentArchivedListView(HybridListView):
@@ -386,7 +480,7 @@ class PaymentPurposeDeleteView(HybridDeleteView):
 
 class VoucherListView(HybridListView):
     model = Voucher
-    filterset_fields = ("voucher_number","purpose", "batch", "batch__year", "amount", "date", "mode")
+    filterset_fields = ("voucher_number", "purpose", "batch", "batch__year", "amount", "date", "mode")
     table_class = VoucherTable
     search_fields = ("voucher_number",)
     title = "Vouchers"
@@ -394,6 +488,7 @@ class VoucherListView(HybridListView):
     metadata = {
         "actions": [
             {"label": _("Archive selected"), "value": "archive"},
+            {"label": _("Print selected"), "value": "print"},
         ]
     }
 
@@ -405,31 +500,41 @@ class VoucherListView(HybridListView):
         selected_raw = request.POST.get("selected_objects", "")
         selected_ids = [value.strip() for value in selected_raw.split(",") if value.strip()]
 
-        if action != "archive":
-            messages.warning(request, _("Please choose a valid action."))
-            return redirect(request.get_full_path())
+        if action == "print":
+            if not selected_ids:
+                messages.warning(request, _("Select at least one voucher before printing."))
+                return redirect(request.get_full_path())
+            
+            # Redirect to print view with selected voucher IDs
+            ids_param = "&".join([f"ids={vid}" for vid in selected_ids])
+            print_url = reverse("umrah:print_selected_vouchers") + "?" + ids_param
+            return redirect(print_url)
 
-        if not selected_ids:
-            messages.warning(request, _("Select at least one voucher before running the action."))
-            return redirect(request.get_full_path())
+        if action == "archive":
+            if not selected_ids:
+                messages.warning(request, _("Select at least one voucher before running the action."))
+                return redirect(request.get_full_path())
 
-        queryset = self.model.objects.filter(pk__in=selected_ids, is_archived=False)
-        updated = queryset.update(is_archived=True)
+            queryset = self.model.objects.filter(pk__in=selected_ids, is_archived=False)
+            updated = queryset.update(is_archived=True)
 
-        if updated:
-            messages.success(
-                request,
-                ngettext(
-                    "%d voucher was archived successfully.",
-                    "%d vouchers were archived successfully.",
-                    updated,
+            if updated:
+                messages.success(
+                    request,
+                    ngettext(
+                        "%d voucher was archived successfully.",
+                        "%d vouchers were archived successfully.",
+                        updated,
+                    )
+                    % updated,
                 )
-                % updated,
-            )
-        else:
-            messages.info(request, _("No vouchers were archived. They might already be archived."))
+            else:
+                messages.info(request, _("No vouchers were archived. They might already be archived."))
 
-        return redirect(self.model.get_list_url())
+            return redirect(self.model.get_list_url())
+
+        messages.warning(request, _("Please choose a valid action."))
+        return redirect(request.get_full_path())
 
 
 class VoucherArchivedListView(HybridListView):
