@@ -14,7 +14,6 @@ urlpatterns = [
     path("bulk_tags/<str:pk>/", views.BulkTags.as_view(), name="bulk_tags"),
     path("reciept/<str:pk>/", views.Reciept.as_view(), name="reciept"),
     path("voucher/<str:pk>/", views.VoucherView.as_view(), name="voucher"),
-    path("daybook/", views.daybook_view, name="daybook"),
     # Agency
     path("agencies/", views.AgencyListView.as_view(), name="agency_list"),
     path("agencies/create/", views.AgencyCreateView.as_view(), name="agency_create"),
