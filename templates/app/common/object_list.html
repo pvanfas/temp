@@ -48,7 +48,7 @@
                 {% endfor %}
               </select>
             </div>
-            <button type="submit" class="btn btn-sm btn-primary" style="min-width: 50px;">
+            <button type="submit" class="btn btn-primary" style="min-width: 50px;">
               {% translate "Go" %}
             </button>
             <p class="mb-0 text-danger small d-none" id="bulk-action-feedback">
@@ -126,6 +126,34 @@
         feedback.classList.add("d-none");
       }
     });
+
+    // Check all functionality - works for any table with check-all checkbox
+    const checkAllCheckbox = form.querySelector('input[type="checkbox"][id^="check-all"]');
+    if (checkAllCheckbox) {
+      // Find all row checkboxes (those with id starting with "checkbox-" but not "check-all")
+      const rowCheckboxes = form.querySelectorAll('input[type="checkbox"][id^="checkbox-"]:not([id^="check-all"])');
+      
+      // Handle check-all checkbox click
+      checkAllCheckbox.addEventListener('change', function() {
+        rowCheckboxes.forEach(function(checkbox) {
+          checkbox.checked = checkAllCheckbox.checked;
+        });
+      });
+
+      // Update check-all checkbox state when individual checkboxes change
+      rowCheckboxes.forEach(function(checkbox) {
+        checkbox.addEventListener('change', function() {
+          const allChecked = Array.from(rowCheckboxes).every(function(cb) {
+            return cb.checked;
+          });
+          const someChecked = Array.from(rowCheckboxes).some(function(cb) {
+            return cb.checked;
+          });
+          checkAllCheckbox.checked = allChecked;
+          checkAllCheckbox.indeterminate = someChecked && !allChecked;
+        });
+      });
+    }
   });
 </script>
 {% endif %}

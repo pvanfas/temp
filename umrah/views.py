@@ -20,6 +20,77 @@ from .models import Agency, Applicant, Batch, PaymentPurpose, UmrahPayment, Vouc
 from .tables import AgencyTable, ApplicantTable, BatchTable, PaymentPurposeTable, UmrahPaymentTable, VoucherTable
 
 
+class UmrahDashboardView(HybridTemplateView):
+    template_name = "umrah/umrah_dashboard.html"
+    title = "Umrah"
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["cards"] = [
+            {
+                "title": "Batches",
+                "url": "umrah:batch_list",
+                "icon": "feather-layers",
+                "gradient": "linear-gradient(135deg, rgba(99, 102, 241, 0.8) 0%, rgba(139, 92, 246, 0.8) 100%)",
+            },
+            {
+                "title": "Agencies",
+                "url": "umrah:agency_list",
+                "icon": "feather-briefcase",
+                "gradient": "linear-gradient(135deg, rgba(236, 72, 153, 0.8) 0%, rgba(219, 39, 119, 0.8) 100%)",
+            },
+            {
+                "title": "Applicants",
+                "url": "umrah:applicant_list",
+                "icon": "feather-users",
+                "gradient": "linear-gradient(135deg, rgba(59, 130, 246, 0.8) 0%, rgba(37, 99, 235, 0.8) 100%)",
+            },
+            {
+                "title": "Payment Purposes",
+                "url": "umrah:payment_purpose_list",
+                "icon": "feather-tag",
+                "gradient": "linear-gradient(135deg, rgba(34, 197, 94, 0.8) 0%, rgba(22, 163, 74, 0.8) 100%)",
+            },
+            {
+                "title": "Vouchers",
+                "url": "umrah:voucher_list",
+                "icon": "feather-file-text",
+                "gradient": "linear-gradient(135deg, rgba(251, 146, 60, 0.8) 0%, rgba(249, 115, 22, 0.8) 100%)",
+            },
+            {
+                "title": "Payment Receipts",
+                "url": "umrah:payment_list",
+                "icon": "feather-credit-card",
+                "gradient": "linear-gradient(135deg, rgba(168, 85, 247, 0.8) 0%, rgba(147, 51, 234, 0.8) 100%)",
+            },
+            {
+                "title": "Archived Vouchers",
+                "url": "umrah:archived_voucher_list",
+                "icon": "feather-inbox",
+                "gradient": "linear-gradient(135deg, rgba(239, 68, 68, 0.8) 0%, rgba(220, 38, 38, 0.8) 100%)",
+            },
+            {
+                "title": "Archived Payments",
+                "url": "umrah:archived_payment_list",
+                "icon": "feather-inbox",
+                "gradient": "linear-gradient(135deg, rgba(14, 165, 233, 0.8) 0%, rgba(2, 132, 199, 0.8) 100%)",
+            },
+            {
+                "title": "Cash Daybook",
+                "url": "umrah:cash_daybook",
+                "icon": "feather-book",
+                "gradient": "linear-gradient(135deg, rgba(20, 184, 166, 0.8) 0%, rgba(15, 118, 110, 0.8) 100%)",
+            },
+            {
+                "title": "Batch Report",
+                "url": "umrah:batch_report",
+                "icon": "feather-bar-chart-2",
+                "gradient": "linear-gradient(135deg, rgba(245, 158, 11, 0.8) 0%, rgba(217, 119, 6, 0.8) 100%)",
+            },
+        ]
+        return context
+
+
 class AgencyListView(HybridListView):
     model = Agency
     filterset_fields = ("name",)
@@ -189,9 +260,9 @@ class UmrahPaymentListView(HybridListView):
                 messages.warning(request, _("Select at least one payment before printing."))
                 return redirect(request.get_full_path())
 
-            # Redirect to print view with selected payment IDs
-            ids_param = "&".join([f"ids={pid}" for pid in selected_ids])
-            print_url = reverse("umrah:print_selected_payments") + "?" + ids_param
+            # Store selected payment IDs in session
+            request.session["selected_payment_ids"] = selected_ids
+            print_url = reverse("umrah:print_selected_payments")
             return redirect(print_url)
 
         if action == "archive":
@@ -248,9 +319,9 @@ class UmrahPaymentArchivedListView(HybridListView):
                 messages.warning(request, _("Select at least one payment before printing."))
                 return redirect(request.get_full_path())
             
-            # Redirect to print view with selected payment IDs
-            ids_param = "&".join([f"ids={pid}" for pid in selected_ids])
-            print_url = reverse("umrah:print_selected_payments") + "?" + ids_param
+            # Store selected payment IDs in session
+            request.session["selected_payment_ids"] = selected_ids
+            print_url = reverse("umrah:print_selected_payments")
             return redirect(print_url)
 
         if action == "unarchive":
@@ -335,7 +406,8 @@ class PrintSelectedPayments(PDFView, LoginRequiredMixin):
 
     def get_context_data(self, *args, **kwargs):
         context = super().get_context_data(*args, **kwargs)
-        payment_ids = self.request.GET.getlist("ids")
+        # Get payment IDs from session
+        payment_ids = self.request.session.pop("selected_payment_ids", [])
         if not payment_ids:
             queryset = UmrahPayment.objects.none()
         else:
@@ -388,9 +460,9 @@ class VoucherListView(HybridListView):
                 messages.warning(request, _("Select at least one voucher before printing."))
                 return redirect(request.get_full_path())
 
-            # Redirect to print view with selected voucher IDs
-            ids_param = "&".join([f"ids={vid}" for vid in selected_ids])
-            print_url = reverse("umrah:print_selected_vouchers") + "?" + ids_param
+            # Store selected voucher IDs in session
+            request.session["selected_voucher_ids"] = selected_ids
+            print_url = reverse("umrah:print_selected_vouchers")
             return redirect(print_url)
 
         if action == "archive":
@@ -447,9 +519,9 @@ class VoucherArchivedListView(HybridListView):
                 messages.warning(request, _("Select at least one voucher before printing."))
                 return redirect(request.get_full_path())
             
-            # Redirect to print view with selected voucher IDs
-            ids_param = "&".join([f"ids={vid}" for vid in selected_ids])
-            print_url = reverse("umrah:print_selected_vouchers") + "?" + ids_param
+            # Store selected voucher IDs in session
+            request.session["selected_voucher_ids"] = selected_ids
+            print_url = reverse("umrah:print_selected_vouchers")
             return redirect(print_url)
 
         if action == "unarchive":
@@ -534,7 +606,8 @@ class PrintSelectedVouchers(PDFView, LoginRequiredMixin):
 
     def get_context_data(self, *args, **kwargs):
         context = super().get_context_data(*args, **kwargs)
-        voucher_ids = self.request.GET.getlist("ids")
+        # Get voucher IDs from session
+        voucher_ids = self.request.session.pop("selected_voucher_ids", [])
         if not voucher_ids:
             queryset = Voucher.objects.none()
         else:
@@ -661,6 +734,136 @@ class CashDaybookView(HybridTemplateView):
                 "total_debit": total_debit,
                 "daily_summary": [{"date": key, **values} for key, values in daily_totals.items()],
                 "monthly_summary": [{"month": key, **values} for key, values in monthly_totals.items()],
+            }
+        )
+        return context
+
+
+class BatchReportView(HybridTemplateView):
+    template_name = "umrah/batch_report.html"
+    title = "Batch Report"
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        batch_id = self.request.GET.get("batch")
+        
+        # Get all batches for the filter dropdown
+        batches = Batch.objects.filter(is_active=True).order_by("-year", "name")
+        context["batches"] = batches
+        
+        if not batch_id:
+            context.update({
+                "batch": None,
+                "entries": [],
+                "opening_balance": Decimal("0.00"),
+                "closing_balance": Decimal("0.00"),
+                "total_credit": Decimal("0.00"),
+                "total_debit": Decimal("0.00"),
+            })
+            return context
+
+        # Get the selected batch
+        try:
+            batch = Batch.objects.get(pk=batch_id, is_active=True)
+        except Batch.DoesNotExist:
+            batch = None
+            context.update({
+                "batch": None,
+                "entries": [],
+                "opening_balance": Decimal("0.00"),
+                "closing_balance": Decimal("0.00"),
+                "total_credit": Decimal("0.00"),
+                "total_debit": Decimal("0.00"),
+            })
+            return context
+
+        context["batch"] = batch
+
+        # Get all payments for applicants in this batch
+        payments = (
+            UmrahPayment.objects.filter(
+                applicant__batch=batch,
+                is_active=True,
+                is_archived=False
+            )
+            .select_related("applicant", "applicant__batch")
+            .order_by("date", "created_at")
+        )
+
+        # Get all vouchers for this batch
+        vouchers = (
+            Voucher.objects.filter(
+                batch=batch,
+                is_active=True,
+                is_archived=False
+            )
+            .select_related("batch", "purpose")
+            .order_by("date", "created_at")
+        )
+
+        entries = []
+        zero = Decimal("0.00")
+
+        # Add payment entries (Credit)
+        for payment in payments:
+            applicant = payment.applicant
+            entries.append(
+                {
+                    "date": payment.date,
+                    "label": _("Receipt"),
+                    "number": payment.reciept_number or "-",
+                    "batch": batch.name,
+                    "head": applicant.get_name() if applicant else "-",
+                    "credit": payment.amount,
+                    "debit": zero,
+                    "notes": payment.notes,
+                    "created_at": payment.created_at,
+                    "sort_index": 0,
+                }
+            )
+
+        # Add voucher entries (Debit)
+        for voucher in vouchers:
+            entries.append(
+                {
+                    "date": voucher.date,
+                    "label": _("Voucher"),
+                    "number": voucher.voucher_number or "-",
+                    "batch": batch.name,
+                    "head": voucher.purpose.name if voucher.purpose else "-",
+                    "credit": zero,
+                    "debit": voucher.amount,
+                    "notes": voucher.notes,
+                    "created_at": voucher.created_at,
+                    "sort_index": 1,
+                }
+            )
+
+        # Sort by date and created_at
+        entries.sort(key=lambda item: (item["date"], item["created_at"], item["sort_index"]))
+
+        # Calculate running balance
+        running_balance = Decimal("0.00")
+        total_credit = zero
+        total_debit = zero
+
+        for entry in entries:
+            credit = entry["credit"]
+            debit = entry["debit"]
+
+            total_credit += credit
+            total_debit += debit
+            running_balance += credit
+            running_balance -= debit
+            entry["balance"] = running_balance
+
+        context.update(
+            {
+                "entries": entries,
+                "opening_balance": Decimal("0.00"),
+                "closing_balance": running_balance,
+                "total_credit": total_credit,
+                "total_debit": total_debit,
             }
         )
         return context

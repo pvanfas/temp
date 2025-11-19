@@ -5,6 +5,7 @@ from . import views
 app_name = "umrah"
 
 urlpatterns = [
+    path("", views.UmrahDashboardView.as_view(), name="umrah_dashboard"),
     path("id_card/<str:pk>/", views.IDCard.as_view(), name="id_card"),
     path("bulk_id_card/<str:pk>/", views.BulkIDCard.as_view(), name="bulk_id_card"),
     path("bulk_reciepts/<str:pk>/", views.BulkReciept.as_view(), name="bulk_reciepts"),
@@ -16,6 +17,7 @@ urlpatterns = [
     path("voucher/<str:pk>/", views.VoucherView.as_view(), name="voucher"),
     # Reports
     path("cash-daybook/", views.CashDaybookView.as_view(), name="cash_daybook"),
+    path("batch-report/", views.BatchReportView.as_view(), name="batch_report"),
     # Agency
     path("agencies/", views.AgencyListView.as_view(), name="agency_list"),
     path("agencies/create/", views.AgencyCreateView.as_view(), name="agency_create"),

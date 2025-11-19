@@ -6,6 +6,7 @@ app_name = "core"
 
 urlpatterns = [
     path("", views.DashboardView.as_view(), name="dashboard_view"),
+    path("masters/", views.MastersDashboardView.as_view(), name="masters_dashboard"),
     # Country
     path("countries/", views.CountryListView.as_view(), name="country_list"),
     path("countries/create/", views.CountryCreateView.as_view(), name="country_create"),

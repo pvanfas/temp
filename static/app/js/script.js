@@ -22,7 +22,7 @@ function getCookie(name) {
 $(function () {
     'use strict'
 
-    $('select.select:not(.offcanvas select)').select2({
+    $('select:not(.offcanvas select)').select2({
         minimumResultsForSearch: '',
         placeholder: "Search",
         width: '100%',

@@ -1,3 +1,4 @@
+from django.utils.safestring import mark_safe
 from django_tables2 import columns
 
 from core.base import BaseTable
@@ -63,6 +64,7 @@ class UmrahPaymentTable(BaseTable):
     checkbox = columns.TemplateColumn(
         '<div class="checkbox-column"><div class="round"><input type="checkbox" id="checkbox-{{ record.pk }}" value="{{ record.pk }}" /><label for="checkbox-{{ record.pk }}"></label></div></div>',
         orderable=False,
+        verbose_name=mark_safe('<div class="checkbox-column"><div class="round"><input type="checkbox" id="check-all-payments" /><label for="check-all-payments"></label></div></div>'),
     )
     applicant = columns.Column(accessor="applicant.fullname", orderable=False, linkify=True)
 
@@ -87,6 +89,7 @@ class VoucherTable(BaseTable):
     checkbox = columns.TemplateColumn(
         '<div class="checkbox-column"><div class="round"><input type="checkbox" id="checkbox-{{ record.pk }}" value="{{ record.pk }}" /><label for="checkbox-{{ record.pk }}"></label></div></div>',
         orderable=False,
+        verbose_name=mark_safe('<div class="checkbox-column"><div class="round"><input type="checkbox" id="check-all-vouchers" /><label for="check-all-vouchers"></label></div></div>'),
     )
     batch = columns.Column(verbose_name="Batch", orderable=True, linkify=True)
 

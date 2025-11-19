@@ -11,6 +11,71 @@ class DashboardView(HybridTemplateView):
         return context
 
 
+class MastersDashboardView(HybridTemplateView):
+    template_name = "app/masters_dashboard.html"
+    title = "Masters"
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["cards"] = [
+            {
+                "title": "Countries",
+                "url": "core:country_list",
+                "icon": "feather-globe",
+                "gradient": "linear-gradient(135deg, rgba(99, 102, 241, 0.8) 0%, rgba(139, 92, 246, 0.8) 100%)",
+            },
+            {
+                "title": "States",
+                "url": "core:state_list",
+                "icon": "feather-map-pin",
+                "gradient": "linear-gradient(135deg, rgba(236, 72, 153, 0.8) 0%, rgba(219, 39, 119, 0.8) 100%)",
+            },
+            {
+                "title": "Districts",
+                "url": "core:district_list",
+                "icon": "feather-map",
+                "gradient": "linear-gradient(135deg, rgba(59, 130, 246, 0.8) 0%, rgba(37, 99, 235, 0.8) 100%)",
+            },
+            {
+                "title": "Zones",
+                "url": "core:zone_list",
+                "icon": "feather-layers",
+                "gradient": "linear-gradient(135deg, rgba(34, 197, 94, 0.8) 0%, rgba(22, 163, 74, 0.8) 100%)",
+            },
+            {
+                "title": "Units",
+                "url": "core:unit_list",
+                "icon": "feather-box",
+                "gradient": "linear-gradient(135deg, rgba(251, 146, 60, 0.8) 0%, rgba(249, 115, 22, 0.8) 100%)",
+            },
+            {
+                "title": "Departments",
+                "url": "core:department_list",
+                "icon": "feather-briefcase",
+                "gradient": "linear-gradient(135deg, rgba(168, 85, 247, 0.8) 0%, rgba(147, 51, 234, 0.8) 100%)",
+            },
+            {
+                "title": "Designations",
+                "url": "core:designation_list",
+                "icon": "feather-user",
+                "gradient": "linear-gradient(135deg, rgba(239, 68, 68, 0.8) 0%, rgba(220, 38, 38, 0.8) 100%)",
+            },
+            {
+                "title": "Years",
+                "url": "core:year_list",
+                "icon": "feather-calendar",
+                "gradient": "linear-gradient(135deg, rgba(14, 165, 233, 0.8) 0%, rgba(2, 132, 199, 0.8) 100%)",
+            },
+            {
+                "title": "Languages",
+                "url": "core:language_list",
+                "icon": "feather-message-circle",
+                "gradient": "linear-gradient(135deg, rgba(20, 184, 166, 0.8) 0%, rgba(15, 118, 110, 0.8) 100%)",
+            },
+        ]
+        return context
+
+
 class CountryListView(HybridListView):
     model = Country
     filterset_fields = ("name",)
