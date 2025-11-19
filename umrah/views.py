@@ -566,11 +566,11 @@ class CashDaybookView(HybridTemplateView):
             start_date, end_date = end_date, start_date
 
         base_payments = (
-            UmrahPayment.objects.filter(mode="CASH", is_active=True)
+            UmrahPayment.objects.filter(mode="CASH", is_active=True, is_archived=False)
             .select_related("applicant", "applicant__batch")
         )
         base_vouchers = (
-            Voucher.objects.filter(mode="CASH", is_active=True)
+            Voucher.objects.filter(mode="CASH", is_active=True, is_archived=False)
             .select_related("batch", "purpose")
         )
 
@@ -579,7 +579,7 @@ class CashDaybookView(HybridTemplateView):
 
         payments_before = base_payments.filter(date__lt=start_date).aggregate(total=Sum("amount"))["total"] or Decimal("0.00")
         vouchers_before = base_vouchers.filter(date__lt=start_date).aggregate(total=Sum("amount"))["total"] or Decimal("0.00")
-        opening_balance = Decimal("849255.00") if (start_date.month == 4 and start_date.day == 1) else payments_before - vouchers_before
+        opening_balance = Decimal("0.00") if (start_date.month == 11 and start_date.day == 1) else payments_before - vouchers_before
 
         entries = []
         zero = Decimal("0.00")
